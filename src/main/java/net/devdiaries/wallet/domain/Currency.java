@@ -16,6 +16,7 @@ public class Currency {
 
     public Currency(String name, String code, BigDecimal amount, BigDecimal rate) {
         this.name = name;
+        this.code = code;
         this.amount = amount;
         this.rate = rate;
     }
