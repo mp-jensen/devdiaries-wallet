@@ -12,7 +12,7 @@
     <artifactId>wallet</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>wallet</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Application from devdiaries.net</description>
 
     <properties>
         <java.version>11</java.version>
