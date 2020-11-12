@@ -1,0 +1,251 @@
+{
+	"info": {
+		"_postman_id": "a8557446-31e9-4475-b0f3-221945e4e4cb",
+		"name": "devdiaries",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET currencies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/currencies",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST currencies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e24c5c97-995b-431b-9448-8b36f8c8353a",
+						"exec": [
+							"pm.sendRequest(\"localhost:8080/currencies\", function (err, response) {\r",
+							"    var currencies = response.json()\r",
+							"    var length = currencies.length;\r",
+							"    var postId = currencies[length-1][\"id\"];\r",
+							"    console.log(postId);\r",
+							"    pm.environment.set(\"postId\", postId);\r",
+							"    pm.test(\"Currencies Increased By One\", function() {\r",
+							"        pm.expect(pm.environment.get(\"currencyCount\")).to.eql(length-1);\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7232595b-dec5-4f92-81b1-9fdaf1963202",
+						"exec": [
+							"pm.sendRequest(\"localhost:8080/currencies\", function (err, response) {\r",
+							"    var currencyCount = response.json().length;\r",
+							"    pm.environment.set(\"currencyCount\", currencyCount);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"amount\": 200,\n\t\"code\": \"JPY\",\n\t\"name\": \"Yen\",\n\t\"rate\": 105.43\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/currencies",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE currencies (from POST)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f95a54b5-f5c8-47d7-9bcf-6b9b6085a72f",
+						"exec": [
+							"pm.sendRequest(\"localhost:8080/currencies\", function (err, response) {\r",
+							"    var currencyCount = response.json().length;\r",
+							"    pm.environment.set(\"currencyCount\", currencyCount);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "88ec4770-df27-4198-bfc2-2258ec92a1c8",
+						"exec": [
+							"pm.sendRequest(\"localhost:8080/currencies\", function (err, response) {\r",
+							"    var currencyCount = response.json().length;\r",
+							"    pm.test(\"Currencies Reduced By One\", function() {\r",
+							"        pm.expect(pm.environment.get(\"currencyCount\")).to.eql(currencyCount+1);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/currencies/{{postId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies",
+						"{{postId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT currencies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "33353b15-f9e0-4ff8-b3b9-c3b57ae69243",
+						"exec": [
+							"pm.sendRequest(\"localhost:8080/currencies\", function (err, response) {\r",
+							"    var currencies = response.json()\r",
+							"    var length = currencies.length;\r",
+							"    var postId = currencies[length-1][\"id\"];\r",
+							"    pm.environment.set(\"putId\", postId);\r",
+							"    pm.test(\"Currencies Increased By One\", function() {\r",
+							"        pm.expect(pm.environment.get(\"currencyCount\")).to.eql(length-1);\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d25c62fa-bc02-4f3e-a4c8-f53b4c6b1348",
+						"exec": [
+							"pm.sendRequest(\"localhost:8080/currencies\", function (err, response) {\r",
+							"    var currencyCount = response.json().length;\r",
+							"    pm.environment.set(\"currencyCount\", currencyCount);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"amount\": 1000,\n\t\"code\": \"JPY\",\n\t\"name\": \"Yen\",\n\t\"rate\": 105.43\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/currencies",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE currencies (from PUT)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2d523fd8-8a02-4834-88e5-ac13358df6ab",
+						"exec": [
+							"pm.sendRequest(\"localhost:8080/currencies\", function (err, response) {\r",
+							"    var currencyCount = response.json().length;\r",
+							"    pm.environment.set(\"currencyCount\", currencyCount);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "63444e93-94bd-4ab1-9e08-c4fa1f731454",
+						"exec": [
+							"pm.sendRequest(\"localhost:8080/currencies\", function (err, response) {\r",
+							"    var currencyCount = response.json().length;\r",
+							"    pm.test(\"Currencies Reduced By One\", function() {\r",
+							"        pm.expect(pm.environment.get(\"currencyCount\")).to.eql(currencyCount+1);\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/currencies/{{putId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies",
+						"{{putId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
